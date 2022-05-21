@@ -30,6 +30,7 @@ export class GifsService {
 
     // Opcion 2 - En una sola linea
     this._historial = JSON.parse(localStorage.getItem('historial')!) || [];
+    this.resultados = JSON.parse(localStorage.getItem('resultados')!) || ''
 
   }
 
@@ -41,8 +42,10 @@ export class GifsService {
       this._historial.unshift(query);
       this._historial = this._historial.splice(0,10);
 
-      // Almacenamos los datos de historial en el local storage
+      // Almacenamos los datos de historial y la consulta en el local storage
       localStorage.setItem('historial', JSON.stringify(this._historial)) 
+      
+
     }
 
     // Esta es una forma de poder consultar los datos, pero es un tanto incómodo por la complejidad
@@ -55,11 +58,13 @@ export class GifsService {
     //   })
     // });
 
+    
+
     this.http.get<SearchGifsResponse>(`https://api.giphy.com/v1/gifs/search?api_key=MXnupyFjAfz6R1EC2Uo73RrczGTF11P8&q=${query}&limit=10`)
     .subscribe( (resp:any) => {
       console.log(resp.data);
       this.resultados = resp.data;
-      
+      localStorage.setItem('resultados', JSON.stringify(this.resultados))
     });
     
     // console.log(this._historial)
