@@ -21,7 +21,17 @@ export class GifsService {
 
   // Inyectamos el módulo y podemos hacer peticiones HTTP 
   // que funciona con base en observables (Son mas poderosos que las promesas)
-  constructor (private http: HttpClient){}
+  constructor (private http: HttpClient){
+
+    // Opcion 1
+    // if( localStorage.getItem('historial')){
+    //   this._historial = JSON.parse(localStorage.getItem('historial')!)
+    // }
+
+    // Opcion 2 - En una sola linea
+    this._historial = JSON.parse(localStorage.getItem('historial')!) || [];
+
+  }
 
   buscarGifs(query:string){
 
@@ -30,6 +40,9 @@ export class GifsService {
     if (!this._historial.includes(query)){
       this._historial.unshift(query);
       this._historial = this._historial.splice(0,10);
+
+      // Almacenamos los datos de historial en el local storage
+      localStorage.setItem('historial', JSON.stringify(this._historial)) 
     }
 
     // Esta es una forma de poder consultar los datos, pero es un tanto incómodo por la complejidad
